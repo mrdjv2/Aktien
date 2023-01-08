@@ -78,6 +78,7 @@ Auslesen<-function()
   
   Gesamt<-rbind(Bewertung, Die_Aktie, Personal)
   
+  
   return(Gesamt)
   
 }
@@ -122,6 +123,8 @@ Seite<-read_html("DE000A1EWWW0")
 Gesamt<-cbind(Gesamt,Auslesen())
 
 
+
+
 Gesamt<-Gesamt[1:(length(Gesamt)-1)]
 Gesamt[Gesamt == "-"] <- "0"
 
@@ -135,3 +138,16 @@ for(i in 1:n){
 }
 
 for(i in 1:length(row.names(Gesamt))){row.names(Gesamt)[i]<- str_replace(row.names(Gesamt)[i], " EUR", " TEUR")}
+
+
+
+if(length(html_table(Seite))==26){
+  Branche <-as.character(html_table(Seite)[[22]][7,2])
+  Sektor <- as.character(html_table(Seite)[[22]][9,2])
+  Land <- as.character(html_table(Seite)[[22]][5,2])
+}
+
+Gesamt$Name<-word(html_text(Seite), start = 1, end = 1, sep = fixed(" "))
+Gesamt$Branche<-Branche
+Gesamt$Sektor<-Sektor
+Gesamt$Land<-Land
